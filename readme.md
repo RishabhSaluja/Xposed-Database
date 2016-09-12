@@ -1,10 +1,10 @@
 === Xposed Database - Access WordPress Tables ===
 
-Contributors: Aashish Parmar, Rishabh Saluja
-License: GPLv3 or later
-Requires at least: 4.5.3
-Tested up to: 4.5.3
-Stable tag: 1.0
+* Contributors: Aashish Parmar, Rishabh Saluja
+* License: GPLv3 or later
+* Requires at least: 4.5.3
+* Tested up to: 4.5.3
+* Stable tag: 1.0
 
 Mainly use to access all tables stored in your WordPress hosted website database.
 
