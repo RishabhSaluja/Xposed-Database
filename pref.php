@@ -1,6 +1,8 @@
 <?php
 
-function create_table() {
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+function xposed_db_create_table() {
 
 	// Create table according to the details given for each column
 	global $table_prefix;

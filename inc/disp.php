@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 echo $_POST['col_name'][0] . " ";
 echo $_POST['primary'][0] . " ";
 echo $_POST['nullx'][0] . " ";

@@ -1,6 +1,6 @@
 <div class="wrap">
 	
-	<div id="icon-options-general" class="icon32"></div>
+        <div id="icon-options-general" class="icon32"></div>
 	<h2>The Official Xposed Database</h2>
 	
 	<div id="poststuff">
@@ -19,15 +19,15 @@
 				
 				<form method="post" action="?page=wp_db">
 					<input type="checkbox" name="del">
-					<input type="hidden" name="tbname" value="<?php echo $_GET['table']; ?>">
+					<input type="hidden" name="tbname" value="<?php echo sanitize_text_field( $_GET['table'] ); ?>">
 					<input type="submit" value="Delete This Table">
 				</form>
 				
 				<div class="postbox" style="overflow: scroll;">
 				
 					<!-- Display the contents of the table selected -->
-					<?php $result = $wpdb->get_results( "SELECT * FROM " . $_GET['table']); 
-					$colx = $wpdb->get_col( "DESC " . $_GET['table'], 0 );
+					<?php $result = $wpdb->get_results( "SELECT * FROM " . sanitize_text_field( $_GET['table'] )); 
+					$colx = $wpdb->get_col( "DESC " . sanitize_text_field( $_GET['table'] ), 0 );
 					$num = 0;
 				
 					echo '<table border><tr>';

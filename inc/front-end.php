@@ -1,15 +1,18 @@
 <!-- Setting to display table's list and their content from a widget or a page or a post -->
 
 <?php
-	global $wpdb;	
+	
+        if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+        global $wpdb;	
 	echo $before_widget;		
 	echo $before_title . $title . $after_title;	
 	
 	if(isset($_GET['table'])) {				
 		echo '<a href="?">Back to Table List</a>		
 		<div class="postbox" style="overflow: scroll;">';				
-		$result = $wpdb->get_results( "SELECT * FROM " . $_GET['table']); 
-		$colx = $wpdb->get_col( "DESC " . $_GET['table'], 0 );
+		$result = $wpdb->get_results( "SELECT * FROM " . sanitize_text_field( $_GET['table'] )); 
+		$colx = $wpdb->get_col( "DESC " . sanitize_text_field( $_GET['table'] ), 0 );
 		$num = 0;				
 		echo '<table border><tr>';
 		foreach($colx as $column_name) {

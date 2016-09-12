@@ -15,7 +15,10 @@
  *
 */
 
-$plugin_url = WP_PLUGIN_URL . '/wp_plugin';
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+//$plugin_url = WP_PLUGIN_URL . '/wp_plugin';
+$plugin_url = plugins_url( __FILE__ );
 
 /*
  *Add a link to our plugin in admin menu
@@ -23,7 +26,7 @@ $plugin_url = WP_PLUGIN_URL . '/wp_plugin';
  *
 */
 
-function wp_db_menu() {
+function xposed_db_wp_db_menu() {
 
 /*
  *	Add a link to our plugin in the admin menu
@@ -36,19 +39,19 @@ add_options_page(
 'DB',
 'manage_options',
 'wp_db',
-'wpdb_options_page'
+'xposed_db_wpdb_options_page'
 );
 
 }
 
-add_action('admin_menu','wp_db_menu');
+add_action('admin_menu','xposed_db_wp_db_menu');
 
 /*
  *Provides ability to administrator to create, edit, 
  *delete or simply view a table from the plugin's 
  *settings page
 */
-function wpdb_options_page() {
+function xposed_db_wpdb_options_page() {
 
 	// When current user lacks priviledges to access plugin's settings page
 	if( !current_user_can( 'manage_options' ) ) {
@@ -61,8 +64,8 @@ function wpdb_options_page() {
 	if(isset($_POST['db_form_submitted'])) {	
 		$hidden_field=esc_html($_POST['db_form_submitted']);	
 		if($hidden_field == 'Y') {	
-			$db_name=esc_html($_POST['db_name']);
-			$col_num=esc_html($_POST['col_num']);
+			$db_name=sanitize_text_field($_POST['db_name']);
+			$col_num=sanitize_text_field($_POST['col_num']);
 			$options['$db_name']=$db_name;
 			$options['$col_num']=$col_num;
 			update_option('wp_plugin',$options);
@@ -72,7 +75,7 @@ function wpdb_options_page() {
 $options=get_option('wp_plugin');
 
 if(isset($_POST['value'])){
-	$sql = "INSERT INTO " . $_GET['table'] . " values( ";
+	$sql = "INSERT INTO " . sanitize_text_field( $_GET['table'] ) . " values( ";
 	$index = 0;
 	foreach($_POST['value'] as $val) {
 		if(!isset($_POST['value'][$index+1]))
@@ -101,9 +104,9 @@ if(isset($_POST['col_name'][0])) {
 		$qryy='';
 		for($i = 0; $i < $options['$col_num']; $i++) {
 			if($i == ($options['$col_num'])-1)
-				$qryx = $qryx . $_POST['col_name'][$i] . " " . $_POST['col_type'][$i] . "(" . $_POST['col_len'][$i] . ")" . $_POST['nullx'][$i] . $_POST['autoincr'][$i] . $_POST['primary'][$i];
+				$qryx = $qryx . sanitize_text_field ( $_POST['col_name'][$i] ) . " " . sanitize_text_field( $_POST['col_type'][$i] ) . "(" . sanitize_text_field( $_POST['col_len'][$i] ) . ")" . sanitize_text_field( $_POST['nullx'][$i] ) . sanitize_text_field( $_POST['autoincr'][$i] ) . sanitize_text_field( $_POST['primary'][$i] );
 			else
-				$qryx = $qryx . $_POST['col_name'][$i] . " " . $_POST['col_type'][$i] . "(" . $_POST['col_len'][$i] . ")" . $_POST['nullx'][$i] . $_POST['autoincr'][$i] . $_POST['primary'][$i] . ", ";						}
+				$qryx = $qryx . sanitize_text_field( $_POST['col_name'][$i] ) . " " . sanitize_text_field( $_POST['col_type'][$i] ) . "(" . sanitize_text_field( $_POST['col_len'][$i] ) . ")" . sanitize_text_field( $_POST['nullx'][$i] ) . sanitize_text_field( $_POST['autoincr'][$i] ) . sanitize_text_field( $_POST['primary'][$i] ) . ", ";						}
 			$sql = 'CREATE TABLE '. $table_name ." ( ".$qryx." );";						
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
@@ -114,7 +117,7 @@ if(isset($_POST['col_name'][0])) {
 
 class Wpdb_Plugin_Widget extends WP_Widget {
 
-	function wpdb_plugin_widget() {
+	function xposed_db_wpdb_plugin_widget() {
 		// Instantiate the parent object
 		parent::__construct( false, 'Xposed Database' );
 	}
@@ -126,27 +129,27 @@ class Wpdb_Plugin_Widget extends WP_Widget {
 		require( 'inc/front-end.php' );
 	}
 
-	function update( $new_instance, $old_instance ) {
+	function xposed_db_update( $new_instance, $old_instance ) {
 		// Save widget options
 		$instance = $old_instance;
 		$instance['title'] = strip_tags($new_instance['title']);
 		return $instance;
 	}
 
-	function form( $instance ) {
+	function xposed_db_form( $instance ) {
 		// Output admin widget options form
 		$title = esc_attr($instance['title']);
 		require( 'inc/widget-fields.php' );
 	}
 }
 
-function wpdb_plugin_register_widgets() {
+function xposed_db_wpdb_plugin_register_widgets() {
 	// Enable plugin to appear on widgets
 	register_widget( 'Wpdb_Plugin_Widget' );
 }
-add_action( 'widgets_init', 'wpdb_plugin_register_widgets' );
+add_action( 'widgets_init', 'xposed_db_wpdb_plugin_register_widgets' );
 
-function wpdb_plugin_shortcode( $atts, $content = null ) {
+function xposed_db_wpdb_plugin_shortcode( $atts, $content = null ) {
 	// Enable shortcodes for Wordpress post or page
 	global $post;
 	ob_start();
@@ -156,5 +159,5 @@ function wpdb_plugin_shortcode( $atts, $content = null ) {
 }
 
 // Shortcode to make the tables appear on Wordpress post or page
-add_shortcode( 'xposeddb', 'wpdb_plugin_shortcode' );
+add_shortcode( 'wpdb_xposed', 'xposed_db_wpdb_plugin_shortcode' );
 ?>
